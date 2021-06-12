@@ -1,0 +1,125 @@
+(alter table)(alter table - add index)(alter table - drop index)
+
+Ejercicio 1 : 
+------------
+Trabaje con la tabla "alumnos" en el cual un instituto de enseñanza guarda los datos de sus alumnos.
+
+1- Elimine la tabla "alumnos" si existe.
+
+2- Cree la tabla:
+ create table alumnos(
+  legajo int unsigned auto_increment,
+  nombre varchar(30),
+  documento char(8) not null,
+  domicilio varchar(30),
+  ciudad varchar(20),
+  provincia varchar(20),
+  primary key(legajo)
+ );
+
+3- Vea los índices de la tabla.
+
+4- Agregue un índice común por los campos "ciudad" y "provincia" (que pueden repetirse):
+ alter table alumnos
+  add index i_ciudadprovincia(ciudad,provincia);
+
+5- Agregue un índice único (no pueden repetirse los valores) por el campo "documento":
+  alter table alumnos
+   add unique index i_documento (documento);
+
+6- Visualice los índices:
+ show index from alumnos;
+
+
+Ejercicio 2 : 
+-----------
+Trabaje con la tabla llamada "medicamentos" de una farmacia.
+
+1- Elimine la tabla, si existe:
+ drop table if exists medicamentos;
+
+2- Cree la tabla con la siguiente estructura:
+ create table medicamentos(
+  codigo int unsigned not null,
+  nombre varchar(20) not null,
+  laboratorio varchar(20),
+  precio decimal(6,2) unsigned
+);
+
+3- Visualice la estructura de la tabla "medicamentos".
+
+4- Agregue una clave primaria por "codigo":
+ alter table medicamentos
+  add primary key (codigo);
+
+La clave agregada, no es auto_increment, por ello, al agregar registros debemos ingresar el código, 
+si no lo hacemos, se almacenará el valor "0" en el primer registro agregado:
+ insert into medicamentos (nombre, laboratorio,precio)
+  values('Sertal compuesto','Bayer',5.10); 
+y si intentamos agregar más registros, aparecerá un mensaje indicando que la clave está repetida:
+ insert into medicamentos (nombre, laboratorio,precio)
+  values('Paracetamol 1000','Bago',2.90);
+
+5- Para solucionar esto podemos modificar el campo convirtiéndolo en autoincrementable:
+ alter table medicamentos
+  modify codigo int unsigned auto_increment;
+
+6- Veamos los registros:
+ select * from medicamentos;
+El código se alteró, ahora tiene el valor "1".
+
+7- Ingrese más registros:
+ insert into medicamentos (nombre, laboratorio,precio)
+  values('Paracetamol 500','Bago',1.90);
+ insert into medicamentos (nombre, laboratorio,precio)
+  values('Bayaspirina','Bayer',2.10);
+
+8- Intente eliminar la clave primaria:
+ alter table medicamentos
+  drop primary key;
+Aparece un mensaje de error. La clave no se puede eliminar porque el campo "codigo" 
+es "auto_increment" y si existe un campo con este atributo DEBE ser clave primaria.
+
+9- Modifique el campo "codigo" quitándole el atributo "auto_increment":
+ alter table medicamentos
+  modify codigo int unsigned not null;
+
+10- Elimine la clave primaria:
+ alter table medicamentos
+  drop primary key;
+
+
+
+Ejercicio 3 : 
+------------
+Una clínica registra las consultas de los pacientes en una tabla llamada "consultas".
+
+1- Elimine la tabla si existe.
+
+2- Cree la tabla con la siguiente estructura:
+create table consultas(
+  fecha date,
+  numero int unsigned,
+  documento char(8) not null,
+  obrasocial varchar(30),
+  medico varchar(30),
+  primary key(fecha,numero),
+  unique i_consulta(documento,fecha,medico),
+  index i_medico (medico),
+  index i_obrasocial (obrasocial)
+ );
+
+3- Vea los índices de la tabla.
+
+4- Elimine el índice único:
+ alter table consultas
+  drop index i_consulta;
+
+5- Elimine los índices comumes:
+ alter table consultas
+  drop index i_medico;
+ alter table consultas
+  drop index i_obrasocial;
+
+6- Vea los índices:
+ show index from consultas;

@@ -1,0 +1,40 @@
+ (alter table - rename - rename table)
+Una empresa tiene almacenados los datos de sus clientes en una tabla llamada "clientes" y los datos 
+de sus empleados en otra tabla denominada "empleados".
+
+1- Elimine ambas tablas si existen.
+
+2- Cree las tablas dándoles el nombre equivocado, es decir, de el nombre "clientes" a la tabla que 
+contiene los datos de los empleados y el nombre "empleados" a la tabla con la informaciómn de los 
+clientes:
+ create table clientes(
+  documento char(8) not null,
+  nombre varchar(30),
+  domicilio varchar(30),
+  fechaingreso date,
+  sueldo decimal(6,2) unsigned
+ );
+
+ create table empleados(
+  documento char(8) not null,
+  nombre varchar(30),
+  domicilio varchar(30),
+  ciudad varchar(30),
+  provincia varchar(30)
+ );
+
+3- Vea la estructura de ambas tablas:
+ describe clientes;
+ describe empleados;
+
+4- Intercambie los nombres de las dos tablas:
+ rename table clientes to auxiliar,
+  empleados to clientes,
+  auxiliar to empleados;
+
+5- Verifique el cambio de nombre:
+ describe clientes;
+ describe empleados;
+
+6- Vea si existe la tabla "auxiliar":
+  show tables;
